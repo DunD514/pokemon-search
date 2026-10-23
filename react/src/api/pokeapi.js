@@ -52,7 +52,7 @@ function toPokemon(data) {
  * An AbortError is re-thrown untouched so the caller can ignore it.
  */
 export async function fetchPokemon(rawQuery, signal) {
-  const slug = rawQuery.trim().replace(/\s+/g, '-');
+  const slug = rawQuery.trim().toLowerCase().replace(/\s+/g, '-');
 
   let response;
   try {
@@ -62,6 +62,11 @@ export async function fetchPokemon(rawQuery, signal) {
     throw new Error(NETWORK_MESSAGE);
   }
 
+  if (response.status === 404) {
+    throw new Error(
+      `No Pokémon found for “${rawQuery.trim()}”. Check the spelling or try its Dex number.`
+    );
+  }
   if (!response.ok) {
     throw new Error(
       `PokéAPI returned an error (${response.status}). Please try again shortly.`

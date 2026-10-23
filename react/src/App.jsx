@@ -25,16 +25,30 @@ export default function App() {
 
   const controllerRef = useRef(null); // AbortController of the in-flight request
 
-  // Cleanup on unmount
+  // Check URL search params for shared query and cleanup on unmount
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get('q');
+    if (initialQuery && initialQuery.trim()) {
+      setQuery(initialQuery.trim());
+      search(initialQuery.trim());
+    }
+
     return () => controllerRef.current?.abort();
   }, []);
 
   async function search(rawQuery) {
     const trimmed = rawQuery.trim();
 
+    if (!trimmed) {
+      setValidation(EMPTY_MESSAGE);
+      return;
+    }
+
     setValidation('');
 
+    // Cancel any previous request so a slow response can't overwrite a newer one
+    controllerRef.current?.abort();
     const controller = new AbortController();
     controllerRef.current = controller;
 

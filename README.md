@@ -74,7 +74,7 @@ No build step. Either open `vanilla/index.html` in a browser, or serve it:
 
 ```bash
 cd vanilla
-python3 -m http.server 8000      # then visit http://localhost:8000
+python3 -m http.server 8080      # then visit http://localhost:8080
 ```
 
 ### React

@@ -46,6 +46,20 @@ export default function SearchBar({
           {validation}
         </p>
       )}
+
+      <div className="examples">
+        <span className="examples__label">Try</span>
+        {EXAMPLES.map((name) => (
+          <button
+            key={name}
+            type="button"
+            className="examples__button"
+            onClick={() => onExample(name)}
+          >
+            {name}
+          </button>
+        ))}
+      </div>
     </>
   );
 }
