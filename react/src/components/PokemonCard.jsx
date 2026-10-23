@@ -58,12 +58,12 @@ function Stats({ stats }) {
           <li className="stat" key={stat.label}>
             <span className="stat__label">{stat.label}</span>
             <span className="stat__value">{stat.value}</span>
-            <span className="stat__bar" aria-hidden="true">
-              <span
+            <div className="stat__bar">
+              <div
                 className="stat__fill"
-                style={{ width: `${Math.min(stat.value / MAX_STAT_VALUE, 1) * 100}%` }}
+                style={{ width: `${Math.min(100, (stat.value / MAX_STAT_VALUE) * 100)}%` }}
               />
-            </span>
+            </div>
           </li>
         ))}
       </ul>

@@ -4,21 +4,26 @@ export default function ModeSwitch({ currentMode = 'react', currentQuery = '' })
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
-  // Close on a click outside the switcher or on Escape
   useEffect(() => {
-    if (!isOpen) return;
-
-    function handlePointerDown(event) {
-      if (!containerRef.current?.contains(event.target)) setIsOpen(false);
+    function handleClickOutside(event) {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
     }
+
     function handleKeyDown(event) {
-      if (event.key === 'Escape') setIsOpen(false);
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
     }
 
-    document.addEventListener('pointerdown', handlePointerDown);
-    document.addEventListener('keydown', handleKeyDown);
+    if (isOpen) {
+      document.addEventListener('pointerdown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
     return () => {
-      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('pointerdown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
@@ -28,10 +33,8 @@ export default function ModeSwitch({ currentMode = 'react', currentQuery = '' })
       const targetPort = targetMode === 'vanilla' ? '8080' : '5173';
       const targetUrl = new URL(window.location.href);
       targetUrl.port = targetPort;
-      // Carry the current search over so the other app opens on the same Pokémon
-      const query = currentQuery.trim();
-      if (query) {
-        targetUrl.searchParams.set('q', query);
+      if (currentQuery && currentQuery.trim()) {
+        targetUrl.searchParams.set('q', currentQuery.trim());
       } else {
         targetUrl.searchParams.delete('q');
       }
