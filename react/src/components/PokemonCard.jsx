@@ -18,6 +18,7 @@ function Facts({ pokemon }) {
   const facts = [
     ['Height', `${pokemon.height.toFixed(1)} m`],
     ['Weight', `${pokemon.weight.toFixed(1)} kg`],
+    ['Base experience', pokemon.baseExperience ?? 'N/A'],
   ];
 
   return (
@@ -48,6 +49,28 @@ function Abilities({ abilities }) {
   );
 }
 
+function Stats({ stats }) {
+  return (
+    <section>
+      <h3 className="card__section-title">Base stats</h3>
+      <ul className="stats">
+        {stats.map((stat) => (
+          <li className="stat" key={stat.label}>
+            <span className="stat__label">{stat.label}</span>
+            <span className="stat__value">{stat.value}</span>
+            <span className="stat__bar" aria-hidden="true">
+              <span
+                className="stat__fill"
+                style={{ width: `${Math.min(stat.value / MAX_STAT_VALUE, 1) * 100}%` }}
+              />
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 /** Full profile card for one Pokémon. */
 export default function PokemonCard({ pokemon }) {
   return (
@@ -69,6 +92,7 @@ export default function PokemonCard({ pokemon }) {
 
         <Facts pokemon={pokemon} />
         <Abilities abilities={pokemon.abilities} />
+        <Stats stats={pokemon.stats} />
       </div>
     </article>
   );
